@@ -1,4 +1,4 @@
-import { Truck, Home, Package, BarChart3, User, LogOut } from "lucide-react";
+import { Truck, Home, Package, BarChart3, User, LogOut, Users, Navigation as NavigationIcon, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +12,9 @@ export const Navigation = ({ activeTab, onTabChange, onLogout }: NavigationProps
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "shipments", label: "Shipments", icon: Package },
+    { id: "shared", label: "Shared", icon: Users },
+    { id: "tracking", label: "Tracking", icon: NavigationIcon },
+    { id: "notifications", label: "Alerts", icon: Bell },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "profile", label: "Profile", icon: User },
   ];
