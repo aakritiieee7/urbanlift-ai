@@ -9,10 +9,6 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BarChart3, Package, User, RefreshCw } from "lucide-react";
-import { UserProfile } from "@/components/profile/UserProfile";
-import { SharedShipments } from "@/components/shared/SharedShipments";
-import { MicroHubTracking } from "@/components/tracking/MicroHubTracking";
-import { NotificationCenter } from "@/components/notifications/NotificationCenter";
 
 interface User {
   id: string;
@@ -20,10 +16,6 @@ interface User {
   name: string;
   businessName: string;
   role: string;
-  organizationId?: string;
-  phone?: string;
-  address?: string;
-  businessType?: string;
 }
 
 const Index = () => {
@@ -67,11 +59,6 @@ const Index = () => {
       title: "Logged out successfully",
       description: "Thank you for using UrbanLift.AI",
     });
-  };
-
-  const handleUpdateUser = (userData: any) => {
-    setUser(userData);
-    localStorage.setItem("urbanlift_user", JSON.stringify(userData));
   };
 
   const handleShipmentSubmit = (shipmentData: any) => {
@@ -212,37 +199,39 @@ const Index = () => {
         );
 
       case "profile":
-        return <UserProfile user={user} onUpdateUser={handleUpdateUser} />;
-
-      case "shared":
-        return <SharedShipments />;
-
-      case "tracking":
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-bold">Live Tracking</h1>
-            {shipments.length > 0 ? (
-              <div className="space-y-6">
-                {shipments.slice(0, 3).map((shipment) => (
-                  <MicroHubTracking key={shipment.id} shipment={shipment} />
-                ))}
-              </div>
-            ) : (
-              <Card className="shadow-sm">
-                <CardContent className="p-8 text-center">
-                  <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">No Active Shipments</h3>
-                  <p className="text-muted-foreground">
-                    Create a shipment to start tracking its journey through our micro-hub network.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
+            <h1 className="text-2xl font-bold">Profile Settings</h1>
+            <Card className="shadow-sm">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-5 h-5" />
+                  Business Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-medium">Business Name</p>
+                    <p className="text-sm text-muted-foreground">{user.businessName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Owner Name</p>
+                    <p className="text-sm text-muted-foreground">{user.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Email</p>
+                    <p className="text-sm text-muted-foreground">{user.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">User Type</p>
+                    <p className="text-sm text-muted-foreground">MSME Owner</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
-
-      case "notifications":
-        return <NotificationCenter />;
 
       default:
         return null;
