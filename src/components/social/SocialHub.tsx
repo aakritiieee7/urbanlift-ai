@@ -41,156 +41,175 @@ interface Message {
 export const SocialHub = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [groups, setGroups] = useState<BusinessGroup[]>([]);
 
-  const businessGroups: BusinessGroup[] = [
-    {
-      id: "hardware",
-      name: "Hardware & Tools",
-      description: "Hardware stores, tool suppliers, construction materials",
-      icon: Wrench,
-      memberCount: 247,
-      color: "text-orange-600",
-      messages: [
-        {
-          id: "1",
-          user: "Rajesh Tools",
-          avatar: "RT",
-          message: "Steel prices have increased by 8% this week. Anyone facing similar issues?",
-          timestamp: "2 hours ago",
-          type: "market_update"
-        },
-        {
-          id: "2",
-          user: "Mumbai Hardware",
-          avatar: "MH",
-          message: "Yes, we're seeing the same trend. Considering bulk purchasing to reduce costs.",
-          timestamp: "1 hour ago",
-          type: "message"
-        },
-        {
-          id: "3",
-          user: "Delhi Construction Supply",
-          avatar: "DCS",
-          message: "Anyone interested in joint procurement? We need 10 tons of cement.",
-          timestamp: "45 minutes ago",
-          type: "opportunity"
-        }
-      ]
-    },
-    {
-      id: "steel",
-      name: "Steel & Metals",
-      description: "Steel traders, metal fabricators, raw material suppliers",
-      icon: Building,
-      memberCount: 189,
-      color: "text-slate-600",
-      messages: [
-        {
-          id: "1",
-          user: "Steel King Industries",
-          avatar: "SKI",
-          message: "Raw material shortage affecting production schedules. Market is volatile.",
-          timestamp: "3 hours ago",
-          type: "market_update"
-        },
-        {
-          id: "2",
-          user: "Metro Steel Works",
-          avatar: "MSW",
-          message: "We have excess capacity this month. Open for contract manufacturing.",
-          timestamp: "2 hours ago",
-          type: "opportunity"
-        }
-      ]
-    },
-    {
-      id: "food",
-      name: "Food & Beverages",
-      description: "Food processors, distributors, restaurant suppliers",
-      icon: Utensils,
-      memberCount: 324,
-      color: "text-green-600",
-      messages: [
-        {
-          id: "1",
-          user: "Fresh Foods Delhi",
-          avatar: "FFD",
-          message: "Seasonal vegetables are in abundance. Great prices this week!",
-          timestamp: "1 hour ago",
-          type: "market_update"
-        },
-        {
-          id: "2",
-          user: "Spice Merchants Co",
-          avatar: "SMC",
-          message: "Looking for reliable cold chain partners for nationwide delivery.",
-          timestamp: "30 minutes ago",
-          type: "opportunity"
-        }
-      ]
-    },
-    {
-      id: "logistics",
-      name: "Logistics & Transport",
-      description: "Fleet operators, freight forwarders, warehouse managers",
-      icon: Truck,
-      memberCount: 156,
-      color: "text-blue-600",
-      messages: [
-        {
-          id: "1",
-          user: "Express Logistics",
-          avatar: "EL",
-          message: "Fuel costs impacting margins. Need to optimize routes better.",
-          timestamp: "4 hours ago",
-          type: "market_update"
-        }
-      ]
-    },
-    {
-      id: "textile",
-      name: "Textile & Garments",
-      description: "Fabric suppliers, garment manufacturers, fashion retailers",
-      icon: Shirt,
-      memberCount: 203,
-      color: "text-purple-600",
-      messages: [
-        {
-          id: "1",
-          user: "Fashion Forward",
-          avatar: "FF",
-          message: "Cotton prices stabilizing after last month's volatility.",
-          timestamp: "2 hours ago",
-          type: "market_update"
-        }
-      ]
-    },
-    {
-      id: "electronics",
-      name: "Electronics & Tech",
-      description: "Electronics dealers, tech distributors, gadget retailers",
-      icon: Monitor,
-      memberCount: 198,
-      color: "text-indigo-600",
-      messages: [
-        {
-          id: "1",
-          user: "Tech Solutions Hub",
-          avatar: "TSH",
-          message: "New smartphone models arriving next week. Pre-orders looking strong.",
-          timestamp: "1 hour ago",
-          type: "market_update"
-        }
-      ]
-    }
-  ];
+  // Initialize groups data on mount
+  useState(() => {
+    setGroups([
+      {
+        id: "hardware",
+        name: "Hardware & Tools",
+        description: "Hardware stores, tool suppliers, construction materials",
+        icon: Wrench,
+        memberCount: 247,
+        color: "text-orange-600",
+        messages: [
+          {
+            id: "1",
+            user: "Rajesh Tools",
+            avatar: "RT",
+            message: "Steel prices have increased by 8% this week. Anyone facing similar issues?",
+            timestamp: "2 hours ago",
+            type: "market_update"
+          },
+          {
+            id: "2",
+            user: "Mumbai Hardware",
+            avatar: "MH",
+            message: "Yes, we're seeing the same trend. Considering bulk purchasing to reduce costs.",
+            timestamp: "1 hour ago",
+            type: "message"
+          },
+          {
+            id: "3",
+            user: "Delhi Construction Supply",
+            avatar: "DCS",
+            message: "Anyone interested in joint procurement? We need 10 tons of cement.",
+            timestamp: "45 minutes ago",
+            type: "opportunity"
+          }
+        ]
+      },
+      {
+        id: "steel",
+        name: "Steel & Metals",
+        description: "Steel traders, metal fabricators, raw material suppliers",
+        icon: Building,
+        memberCount: 189,
+        color: "text-slate-600",
+        messages: [
+          {
+            id: "1",
+            user: "Steel King Industries",
+            avatar: "SKI",
+            message: "Raw material shortage affecting production schedules. Market is volatile.",
+            timestamp: "3 hours ago",
+            type: "market_update"
+          },
+          {
+            id: "2",
+            user: "Metro Steel Works",
+            avatar: "MSW",
+            message: "We have excess capacity this month. Open for contract manufacturing.",
+            timestamp: "2 hours ago",
+            type: "opportunity"
+          }
+        ]
+      },
+      {
+        id: "food",
+        name: "Food & Beverages",
+        description: "Food processors, distributors, restaurant suppliers",
+        icon: Utensils,
+        memberCount: 324,
+        color: "text-green-600",
+        messages: [
+          {
+            id: "1",
+            user: "Fresh Foods Delhi",
+            avatar: "FFD",
+            message: "Seasonal vegetables are in abundance. Great prices this week!",
+            timestamp: "1 hour ago",
+            type: "market_update"
+          },
+          {
+            id: "2",
+            user: "Spice Merchants Co",
+            avatar: "SMC",
+            message: "Looking for reliable cold chain partners for nationwide delivery.",
+            timestamp: "30 minutes ago",
+            type: "opportunity"
+          }
+        ]
+      },
+      {
+        id: "logistics",
+        name: "Logistics & Transport",
+        description: "Fleet operators, freight forwarders, warehouse managers",
+        icon: Truck,
+        memberCount: 156,
+        color: "text-blue-600",
+        messages: [
+          {
+            id: "1",
+            user: "Express Logistics",
+            avatar: "EL",
+            message: "Fuel costs impacting margins. Need to optimize routes better.",
+            timestamp: "4 hours ago",
+            type: "market_update"
+          }
+        ]
+      },
+      {
+        id: "textile",
+        name: "Textile & Garments",
+        description: "Fabric suppliers, garment manufacturers, fashion retailers",
+        icon: Shirt,
+        memberCount: 203,
+        color: "text-purple-600",
+        messages: [
+          {
+            id: "1",
+            user: "Fashion Forward",
+            avatar: "FF",
+            message: "Cotton prices stabilizing after last month's volatility.",
+            timestamp: "2 hours ago",
+            type: "market_update"
+          }
+        ]
+      },
+      {
+        id: "electronics",
+        name: "Electronics & Tech",
+        description: "Electronics dealers, tech distributors, gadget retailers",
+        icon: Monitor,
+        memberCount: 198,
+        color: "text-indigo-600",
+        messages: [
+          {
+            id: "1",
+            user: "Tech Solutions Hub",
+            avatar: "TSH",
+            message: "New smartphone models arriving next week. Pre-orders looking strong.",
+            timestamp: "1 hour ago",
+            type: "market_update"
+          }
+        ]
+      }
+    ]);
+  });
 
-  const selectedGroupData = businessGroups.find(group => group.id === selectedGroup);
+  const selectedGroupData = groups.find(group => group.id === selectedGroup);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() && selectedGroupData) {
-      // In a real app, this would send to backend
-      console.log(`Sending message to ${selectedGroup}: ${newMessage}`);
+    if (newMessage.trim() && selectedGroup) {
+      const newMsg: Message = {
+        id: `msg-${Date.now()}`,
+        user: "You",
+        avatar: "YU",
+        message: newMessage.trim(),
+        timestamp: "now",
+        type: "message"
+      };
+
+      setGroups(prevGroups => 
+        prevGroups.map(group => 
+          group.id === selectedGroup 
+            ? { ...group, messages: [...group.messages, newMsg] }
+            : group
+        )
+      );
+      
       setNewMessage("");
     }
   };
@@ -237,7 +256,7 @@ export const SocialHub = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {businessGroups.map((group) => {
+              {groups.map((group) => {
                 const Icon = group.icon;
                 return (
                   <div
