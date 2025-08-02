@@ -4,6 +4,7 @@ import { Navigation } from "@/components/ui/navigation";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { ShipmentForm } from "@/components/shipments/ShipmentForm";
 import { ShipmentList } from "@/components/shipments/ShipmentList";
+import { CollaborationHub } from "@/components/collaboration/CollaborationHub";
 import { useShipments } from "@/hooks/useShipments";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -70,6 +71,13 @@ const Index = () => {
     toast({
       title: "Tracking Information",
       description: `Real-time tracking for ${shipmentId} is now available in your dashboard.`,
+    });
+  };
+
+  const handleCollaboration = (shipmentIds: string[]) => {
+    toast({
+      title: "Collaboration Started!",
+      description: `Successfully initiated collaboration for ${shipmentIds.length} shipments.`,
     });
   };
 
@@ -164,6 +172,14 @@ const Index = () => {
             <ShipmentForm onSubmit={handleShipmentSubmit} />
             <ShipmentList shipments={shipments} onTrack={handleTrackShipment} />
           </div>
+        );
+
+      case "collaboration":
+        return (
+          <CollaborationHub 
+            userShipments={shipments} 
+            onCollaborate={handleCollaboration}
+          />
         );
 
       case "analytics":
