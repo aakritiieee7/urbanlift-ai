@@ -5,6 +5,7 @@ import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { ShipmentForm } from "@/components/shipments/ShipmentForm";
 import { ShipmentList } from "@/components/shipments/ShipmentList";
 import { CollaborationHub } from "@/components/collaboration/CollaborationHub";
+import { SocialHub } from "@/components/social/SocialHub";
 import { useShipments } from "@/hooks/useShipments";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -181,6 +182,9 @@ const Index = () => {
             onCollaborate={handleCollaboration}
           />
         );
+
+      case "social":
+        return <SocialHub />;
 
       case "analytics":
         return (

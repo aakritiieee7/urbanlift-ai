@@ -13,6 +13,7 @@ export const Navigation = ({ activeTab, onTabChange, onLogout }: NavigationProps
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "shipments", label: "Shipments", icon: Package },
     { id: "collaboration", label: "Collaboration", icon: Users },
+    { id: "social", label: "Social", icon: Users },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "profile", label: "Profile", icon: User },
   ];
