@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   MessageSquare, 
   Users, 
@@ -16,8 +17,12 @@ import {
   Shirt,
   Monitor,
   Send,
-  Hash
+  Hash,
+  Star,
+  Trophy
 } from "lucide-react";
+import { CommunityPosts } from "./CommunityPosts";
+import { CreditSystem } from "./CreditSystem";
 
 interface BusinessGroup {
   id: string;
@@ -239,155 +244,182 @@ export const SocialHub = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Business Community</h1>
+        <h1 className="text-2xl font-bold">Social Hub</h1>
         <p className="text-muted-foreground">
-          Connect with fellow entrepreneurs, share market insights, and discover collaboration opportunities
+          Connect with fellow entrepreneurs, discover opportunities, and track your achievements
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Groups List */}
-        <div className="lg:col-span-1">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                Business Groups
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {groups.map((group) => {
-                const Icon = group.icon;
-                return (
-                  <div
-                    key={group.id}
-                    className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-secondary ${
-                      selectedGroup === group.id ? 'bg-primary/10 border-primary' : 'bg-background'
-                    }`}
-                    onClick={() => setSelectedGroup(group.id)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg bg-secondary ${group.color}`}>
-                        <Icon className="w-4 h-4" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-sm">{group.name}</h3>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {group.description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="secondary" className="text-xs">
-                            {group.memberCount} members
-                          </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            {group.messages.length} new
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-        </div>
+      <Tabs defaultValue="community" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="community" className="flex items-center gap-2">
+            <MessageSquare className="w-4 h-4" />
+            Community Posts
+          </TabsTrigger>
+          <TabsTrigger value="groups" className="flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Business Groups
+          </TabsTrigger>
+          <TabsTrigger value="leaderboard" className="flex items-center gap-2">
+            <Trophy className="w-4 h-4" />
+            Credits & Leaderboard
+          </TabsTrigger>
+        </TabsList>
 
-        {/* Chat Area */}
-        <div className="lg:col-span-2">
-          {selectedGroupData ? (
-            <Card className="h-[600px] flex flex-col">
-              <CardHeader className="flex-shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg bg-secondary ${selectedGroupData.color}`}>
-                    <selectedGroupData.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="flex items-center gap-2">
-                      <Hash className="w-4 h-4" />
-                      {selectedGroupData.name}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {selectedGroupData.memberCount} members • {selectedGroupData.description}
-                    </p>
-                  </div>
-                </div>
-              </CardHeader>
-              
-              <Separator />
-              
-              {/* Messages */}
-              <CardContent className="flex-1 p-0">
-                <ScrollArea className="h-full p-4">
-                  <div className="space-y-4">
-                    {selectedGroupData.messages.map((message) => (
-                      <div key={message.id} className="space-y-2">
-                        <div className="flex items-start gap-3">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className="text-xs">
-                              {message.avatar}
-                            </AvatarFallback>
-                          </Avatar>
+        <TabsContent value="community" className="space-y-4">
+          <CommunityPosts />
+        </TabsContent>
+
+        <TabsContent value="groups" className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Groups List */}
+            <div className="lg:col-span-1">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="w-5 h-5" />
+                    Business Groups
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {groups.map((group) => {
+                    const Icon = group.icon;
+                    return (
+                      <div
+                        key={group.id}
+                        className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-secondary ${
+                          selectedGroup === group.id ? 'bg-primary/10 border-primary' : 'bg-background'
+                        }`}
+                        onClick={() => setSelectedGroup(group.id)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg bg-secondary ${group.color}`}>
+                            <Icon className="w-4 h-4" />
+                          </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="font-medium text-sm">{message.user}</span>
-                              <span className="text-xs text-muted-foreground">
-                                {message.timestamp}
-                              </span>
-                              {message.type !== 'message' && (
-                                <Badge 
-                                  variant="outline" 
-                                  className={`text-xs ${getMessageTypeColor(message.type)}`}
-                                >
-                                  {getMessageTypeIcon(message.type)} {message.type.replace('_', ' ')}
-                                </Badge>
-                              )}
+                            <h3 className="font-medium text-sm">{group.name}</h3>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {group.description}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Badge variant="secondary" className="text-xs">
+                                {group.memberCount} members
+                              </Badge>
+                              <Badge variant="outline" className="text-xs">
+                                {group.messages.length} new
+                              </Badge>
                             </div>
-                            <p className="text-sm text-foreground">{message.message}</p>
                           </div>
                         </div>
                       </div>
-                    ))}
+                    );
+                  })}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Chat Area */}
+            <div className="lg:col-span-2">
+              {selectedGroupData ? (
+                <Card className="h-[600px] flex flex-col">
+                  <CardHeader className="flex-shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className={`p-2 rounded-lg bg-secondary ${selectedGroupData.color}`}>
+                        <selectedGroupData.icon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <CardTitle className="flex items-center gap-2">
+                          <Hash className="w-4 h-4" />
+                          {selectedGroupData.name}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedGroupData.memberCount} members • {selectedGroupData.description}
+                        </p>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  
+                  <Separator />
+                  
+                  {/* Messages */}
+                  <CardContent className="flex-1 p-0">
+                    <ScrollArea className="h-full p-4">
+                      <div className="space-y-4">
+                        {selectedGroupData.messages.map((message) => (
+                          <div key={message.id} className="space-y-2">
+                            <div className="flex items-start gap-3">
+                              <Avatar className="w-8 h-8">
+                                <AvatarFallback className="text-xs">
+                                  {message.avatar}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="font-medium text-sm">{message.user}</span>
+                                  <span className="text-xs text-muted-foreground">
+                                    {message.timestamp}
+                                  </span>
+                                  {message.type !== 'message' && (
+                                    <Badge 
+                                      variant="outline" 
+                                      className={`text-xs ${getMessageTypeColor(message.type)}`}
+                                    >
+                                      {getMessageTypeIcon(message.type)} {message.type.replace('_', ' ')}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-foreground">{message.message}</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                  
+                  <Separator />
+                  
+                  {/* Message Input */}
+                  <div className="p-4 flex-shrink-0">
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder={`Message #${selectedGroupData.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        className="flex-1"
+                      />
+                      <Button 
+                        onClick={handleSendMessage}
+                        disabled={!newMessage.trim()}
+                        size="sm"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
-                </ScrollArea>
-              </CardContent>
-              
-              <Separator />
-              
-              {/* Message Input */}
-              <div className="p-4 flex-shrink-0">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder={`Message #${selectedGroupData.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    className="flex-1"
-                  />
-                  <Button 
-                    onClick={handleSendMessage}
-                    disabled={!newMessage.trim()}
-                    size="sm"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          ) : (
-            <Card className="h-[600px] flex items-center justify-center">
-              <div className="text-center space-y-3">
-                <MessageSquare className="w-12 h-12 mx-auto text-muted-foreground" />
-                <div>
-                  <h3 className="font-medium">Select a Business Group</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Choose a group from the left to start chatting with fellow entrepreneurs
-                  </p>
-                </div>
-              </div>
-            </Card>
-          )}
-        </div>
-      </div>
+                </Card>
+              ) : (
+                <Card className="h-[600px] flex items-center justify-center">
+                  <div className="text-center space-y-3">
+                    <MessageSquare className="w-12 h-12 mx-auto text-muted-foreground" />
+                    <div>
+                      <h3 className="font-medium">Select a Business Group</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Choose a group from the left to start chatting with fellow entrepreneurs
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              )}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="leaderboard" className="space-y-4">
+          <CreditSystem />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
