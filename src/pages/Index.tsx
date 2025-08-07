@@ -259,7 +259,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/30">
       <Navigation 
         activeTab={activeTab} 
         onTabChange={setActiveTab} 

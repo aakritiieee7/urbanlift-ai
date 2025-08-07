@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import socialCommunity from "@/assets/social-community.jpg";
 import { 
   MessageSquare, 
   Users, 
@@ -19,7 +20,9 @@ import {
   Send,
   Hash,
   Star,
-  Trophy
+  Trophy,
+  Network,
+  Megaphone
 } from "lucide-react";
 import { CommunityPosts } from "./CommunityPosts";
 import { CreditSystem } from "./CreditSystem";
@@ -243,11 +246,30 @@ export const SocialHub = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Social Hub</h1>
-        <p className="text-muted-foreground">
-          Connect with fellow entrepreneurs, discover opportunities, and track your achievements
-        </p>
+      {/* Hero Section */}
+      <div className="relative rounded-lg overflow-hidden shadow-elegant">
+        <div 
+          className="h-40 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${socialCommunity})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-hero opacity-85" />
+          <div className="absolute inset-0 flex items-center justify-center text-center text-white">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">💬 Social Hub</h1>
+              <p className="text-lg opacity-90">Connect, collaborate, and grow your business network</p>
+              <div className="flex items-center justify-center gap-4 mt-3">
+                <div className="flex items-center gap-2">
+                  <Network className="w-4 h-4" />
+                  <span className="text-sm">Business Groups</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Megaphone className="w-4 h-4" />
+                  <span className="text-sm">Community Posts</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Tabs defaultValue="community" className="w-full">

@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Truck, CheckCircle, Clock, IndianRupee, Leaf } from "lucide-react";
+import { Package, Truck, CheckCircle, Clock, IndianRupee, Leaf, TrendingUp, Globe } from "lucide-react";
+import logisticsHero from "@/assets/logistics-hero.jpg";
 
 interface StatsData {
   totalShipments: number;
@@ -67,13 +68,42 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
 
   return (
     <div className="space-y-6">
+      {/* Hero Section */}
+      <div className="relative rounded-lg overflow-hidden shadow-elegant">
+        <div 
+          className="h-48 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${logisticsHero})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-hero opacity-80" />
+          <div className="absolute inset-0 flex items-center justify-center text-center text-primary-foreground">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">Welcome to UrbanLift.AI</h1>
+              <p className="text-lg opacity-90">Smart logistics, shared success, sustainable future</p>
+              <div className="flex items-center justify-center gap-4 mt-4">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  <span className="text-sm">AI-Optimized Routes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="w-5 h-5" />
+                  <span className="text-sm">Eco-Friendly Delivery</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div>
-        <h2 className="text-lg font-semibold mb-4">Shipment Overview</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">📊 Your Shipment Overview</h2>
+          <p className="text-sm text-muted-foreground">Real-time logistics dashboard</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {statsCards.map((stat) => {
             const Icon = stat.icon;
             return (
-              <Card key={stat.title} className="shadow-sm">
+              <Card key={stat.title} className="shadow-card hover:shadow-glow transition-all duration-300 bg-gradient-card border-0">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -94,12 +124,15 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold mb-4">Eco-Lift Impact</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold">🌱 Eco-Lift Impact</h2>
+          <p className="text-sm text-muted-foreground">Your environmental contribution</p>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {impactCards.map((impact) => {
             const Icon = impact.icon;
             return (
-              <Card key={impact.title} className="shadow-sm">
+              <Card key={impact.title} className="shadow-card hover:shadow-elegant transition-all duration-300 bg-gradient-primary text-primary-foreground border-0">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>

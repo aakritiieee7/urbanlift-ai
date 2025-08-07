@@ -58,15 +58,20 @@ export const ShipmentList = ({ shipments, onTrack }: ShipmentListProps) => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Your Shipments</h2>
-        <Badge variant="secondary">{shipments.length} total</Badge>
+    <div className="space-y-6">
+      <div className="bg-gradient-card rounded-lg p-6 shadow-card">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold">📦 Your Active Shipments</h2>
+            <p className="text-muted-foreground text-sm mt-1">Track and manage all your delivery requests</p>
+          </div>
+          <Badge variant="secondary" className="bg-gradient-blue text-white border-0">{shipments.length} active</Badge>
+        </div>
       </div>
       
       <div className="grid gap-4">
         {shipments.map((shipment) => (
-          <Card key={shipment.id} className="shadow-sm hover:shadow-md transition-shadow">
+          <Card key={shipment.id} className="shadow-card hover:shadow-glow transition-all duration-300 bg-gradient-card border-0">
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div>

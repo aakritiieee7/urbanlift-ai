@@ -3,9 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
-import { MapPin, Package, Users, Clock, DollarSign, Sparkles } from "lucide-react";
+import { MapPin, Package, Users, Clock, DollarSign, Sparkles, Network, Handshake } from "lucide-react";
 import { Shipment } from "@/hooks/useShipments";
 import { useAIOptimization } from "@/hooks/useAIOptimization";
+import collaborationNetwork from "@/assets/collaboration-network.jpg";
 
 interface CollaborationHubProps {
   userShipments: Shipment[];
@@ -168,11 +169,37 @@ export const CollaborationHub = ({ userShipments, onCollaborate }: Collaboration
 
   return (
     <div className="space-y-6">
+      {/* Hero Section */}
+      <div className="relative rounded-lg overflow-hidden shadow-elegant">
+        <div 
+          className="h-40 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${collaborationNetwork})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-purple opacity-85" />
+          <div className="absolute inset-0 flex items-center justify-center text-center text-white">
+            <div>
+              <h1 className="text-3xl font-bold mb-2">🤝 Collaboration Hub</h1>
+              <p className="text-lg opacity-90">Connect, share routes, save money, protect environment</p>
+              <div className="flex items-center justify-center gap-4 mt-3">
+                <div className="flex items-center gap-2">
+                  <Network className="w-4 h-4" />
+                  <span className="text-sm">Smart Matching</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Handshake className="w-4 h-4" />
+                  <span className="text-sm">Mutual Benefits</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Collaboration Hub</h1>
+          <h2 className="text-xl font-semibold">🎯 Find Perfect Shipping Partners</h2>
           <p className="text-muted-foreground">
-            Find nearby shipments and collaborate to save costs and reduce emissions
+            AI-powered matching algorithm finds the best collaboration opportunities
           </p>
         </div>
         {selectedShipments.length > 0 && (
@@ -189,7 +216,7 @@ export const CollaborationHub = ({ userShipments, onCollaborate }: Collaboration
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="bg-gradient-blue text-white border-0 shadow-colored">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5 text-primary" />
@@ -200,10 +227,10 @@ export const CollaborationHub = ({ userShipments, onCollaborate }: Collaboration
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-primary text-primary-foreground border-0 shadow-elegant">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="w-5 h-5 text-success" />
+              <DollarSign className="w-5 h-5" />
               <div>
                 <p className="text-2xl font-bold">₹{nearbyShipments.reduce((sum, s) => sum + s.estimatedSavings, 0)}</p>
                 <p className="text-sm text-muted-foreground">Potential Savings</p>
@@ -211,10 +238,10 @@ export const CollaborationHub = ({ userShipments, onCollaborate }: Collaboration
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-gradient-accent text-accent-foreground border-0 shadow-colored">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-info" />
+              <MapPin className="w-5 h-5" />
               <div>
                 <p className="text-2xl font-bold">{nearbyShipments.filter(s => s.isHighlighted).length}</p>
                 <p className="text-sm text-muted-foreground">Matching Routes</p>
@@ -226,7 +253,10 @@ export const CollaborationHub = ({ userShipments, onCollaborate }: Collaboration
 
       {/* Available Shipments */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Available Nearby Shipments</h2>
+        <div className="bg-gradient-card rounded-lg p-4 shadow-card">
+          <h2 className="text-lg font-semibold">🚛 Available Partnership Opportunities</h2>
+          <p className="text-sm text-muted-foreground">Click on shipments to select them for collaboration</p>
+        </div>
         {nearbyShipments.map((shipment) => (
           <Card 
             key={shipment.id} 

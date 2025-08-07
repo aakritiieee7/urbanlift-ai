@@ -5,8 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, MapPin, Weight, Truck } from "lucide-react";
+import { Package, MapPin, Weight, Truck, Sparkles, Route } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import truckTracking from "@/assets/truck-tracking.jpg";
 
 interface ShipmentFormProps {
   onSubmit: (shipmentData: any) => void;
@@ -79,16 +80,33 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
   };
 
   return (
-    <Card className="shadow-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Package className="w-5 h-5" />
-          Create New Shipment Request
-        </CardTitle>
-        <CardDescription>
-          Fill in the details below and our AI will optimize your delivery route and find cost-effective shared logistics options.
-        </CardDescription>
-      </CardHeader>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="relative rounded-lg overflow-hidden shadow-colored">
+        <div 
+          className="h-32 bg-cover bg-center relative"
+          style={{ backgroundImage: `url(${truckTracking})` }}
+        >
+          <div className="absolute inset-0 bg-gradient-blue opacity-85" />
+          <div className="absolute inset-0 flex items-center justify-center text-center text-white">
+            <div>
+              <h2 className="text-2xl font-bold mb-1">🚚 Create Shipment Request</h2>
+              <p className="text-sm opacity-90">AI-powered route optimization & smart logistics matching</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <Card className="shadow-card border-0 bg-gradient-card">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Sparkles className="w-5 h-5 text-primary" />
+            Shipment Details
+          </CardTitle>
+          <CardDescription>
+            🎯 Our AI analyzes millions of routes to find the most efficient and cost-effective delivery options for you.
+          </CardDescription>
+        </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -192,18 +210,22 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full bg-gradient-primary hover:shadow-elegant transition-all duration-300" disabled={isLoading}>
             {isLoading ? (
               <div className="flex items-center gap-2">
-                <Truck className="w-4 h-4 animate-pulse" />
-                AI Optimizing Route...
+                <Route className="w-4 h-4 animate-spin" />
+                🤖 AI Optimizing Route...
               </div>
             ) : (
-              "Create Shipment Request"
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Create Smart Shipment
+              </div>
             )}
           </Button>
         </form>
       </CardContent>
     </Card>
+    </div>
   );
 };
