@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, MapPin, Weight, Truck, Sparkles, Route } from "lucide-react";
+import { Package, Weight, Truck, Sparkles, Route } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { LocationPicker } from "@/components/maps/LocationPicker";
 import truckTracking from "@/assets/truck-tracking.jpg";
 
 interface ShipmentFormProps {
@@ -23,6 +25,8 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
     description: "",
     urgency: "normal",
   });
+  const [pickupCoords, setPickupCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [dropoffCoords, setDropoffCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -33,14 +37,32 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
     // Simulate AI optimization API call
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Mock AI response
+    // Mock AI response with enhanced route data if coordinates are available
+    let routeOptimization = {};
+    if (pickupCoords && dropoffCoords) {
+      // Calculate approximate distance (simplified)
+      const distance = Math.sqrt(
+        Math.pow(dropoffCoords.lat - pickupCoords.lat, 2) + 
+        Math.pow(dropoffCoords.lng - pickupCoords.lng, 2)
+      ) * 111; // Rough km conversion
+      
+      routeOptimization = {
+        distance: `${distance.toFixed(1)} km`,
+        coordinates: {
+          pickup: pickupCoords,
+          dropoff: dropoffCoords
+        }
+      };
+    }
+
     const aiOptimization = {
       eta: "2-3 hours",
       cost: Math.floor(Math.random() * 500) + 200,
       route_data: {
-        distance: "12.5 km",
+        distance: routeOptimization.distance || "12.5 km",
         stops: 3,
-        sharedWith: "2 other shipments"
+        sharedWith: "2 other shipments",
+        ...routeOptimization
       },
       matched: true,
       savings: Math.floor(Math.random() * 200) + 100,
@@ -71,12 +93,24 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
       description: "",
       urgency: "normal",
     });
+    setPickupCoords(null);
+    setDropoffCoords(null);
 
     setIsLoading(false);
   };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePickupLocationSelect = (location: { address: string; lat: number; lng: number }) => {
+    setFormData(prev => ({ ...prev, pickupLocation: location.address }));
+    setPickupCoords({ lat: location.lat, lng: location.lng });
+  };
+
+  const handleDropoffLocationSelect = (location: { address: string; lat: number; lng: number }) => {
+    setFormData(prev => ({ ...prev, dropoffLocation: location.address }));
+    setDropoffCoords({ lat: location.lat, lng: location.lng });
   };
 
   return (
@@ -107,125 +141,112 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
             🎯 Our AI analyzes millions of routes to find the most efficient and cost-effective delivery options for you.
           </CardDescription>
         </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Shipment Title</Label>
-              <Input
-                id="title"
-                placeholder="Electronics Delivery"
-                value={formData.title}
-                onChange={(e) => handleInputChange("title", e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="goodsType">Goods Type</Label>
-              <Select value={formData.goodsType} onValueChange={(value) => handleInputChange("goodsType", value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select goods type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="electronics">Electronics</SelectItem>
-                  <SelectItem value="textiles">Textiles</SelectItem>
-                  <SelectItem value="food">Food Items</SelectItem>
-                  <SelectItem value="machinery">Machinery</SelectItem>
-                  <SelectItem value="chemicals">Chemicals</SelectItem>
-                  <SelectItem value="documents">Documents</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="pickup" className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                Pickup Location
-              </Label>
-              <Input
-                id="pickup"
-                placeholder="Chandni Chowk, Delhi"
-                value={formData.pickupLocation}
-                onChange={(e) => handleInputChange("pickupLocation", e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="dropoff" className="flex items-center gap-2">
-                <MapPin className="w-4 h-4" />
-                Drop-off Location
-              </Label>
-              <Input
-                id="dropoff"
-                placeholder="Connaught Place, Delhi"
-                value={formData.dropoffLocation}
-                onChange={(e) => handleInputChange("dropoffLocation", e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="weight" className="flex items-center gap-2">
-                <Weight className="w-4 h-4" />
-                Weight (kg)
-              </Label>
-              <Input
-                id="weight"
-                type="number"
-                placeholder="10"
-                value={formData.weight}
-                onChange={(e) => handleInputChange("weight", e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="urgency">Urgency Level</Label>
-              <Select value={formData.urgency} onValueChange={(value) => handleInputChange("urgency", value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low - Within 24 hours</SelectItem>
-                  <SelectItem value="normal">Normal - Within 12 hours</SelectItem>
-                  <SelectItem value="high">High - Within 6 hours</SelectItem>
-                  <SelectItem value="urgent">Urgent - ASAP</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="description">Additional Description</Label>
-            <Textarea
-              id="description"
-              placeholder="Any special handling instructions or additional details..."
-              value={formData.description}
-              onChange={(e) => handleInputChange("description", e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          <Button type="submit" className="w-full bg-gradient-primary hover:shadow-elegant transition-all duration-300" disabled={isLoading}>
-            {isLoading ? (
-              <div className="flex items-center gap-2">
-                <Route className="w-4 h-4 animate-spin" />
-                🤖 AI Optimizing Route...
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="title">Shipment Title</Label>
+                <Input
+                  id="title"
+                  placeholder="Electronics Delivery"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange("title", e.target.value)}
+                  required
+                />
               </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                Create Smart Shipment
+              <div className="space-y-2">
+                <Label htmlFor="goodsType">Goods Type</Label>
+                <Select value={formData.goodsType} onValueChange={(value) => handleInputChange("goodsType", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select goods type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="electronics">Electronics</SelectItem>
+                    <SelectItem value="textiles">Textiles</SelectItem>
+                    <SelectItem value="food">Food Items</SelectItem>
+                    <SelectItem value="machinery">Machinery</SelectItem>
+                    <SelectItem value="chemicals">Chemicals</SelectItem>
+                    <SelectItem value="documents">Documents</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-            )}
-          </Button>
-        </form>
-      </CardContent>
-    </Card>
+            </div>
+
+            {/* Location Selection with Maps */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <LocationPicker
+                label="Pickup Location"
+                placeholder="Search for pickup location..."
+                onLocationSelect={handlePickupLocationSelect}
+                initialValue={formData.pickupLocation}
+              />
+              <LocationPicker
+                label="Drop-off Location"
+                placeholder="Search for drop-off location..."
+                onLocationSelect={handleDropoffLocationSelect}
+                initialValue={formData.dropoffLocation}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="weight" className="flex items-center gap-2">
+                  <Weight className="w-4 h-4" />
+                  Weight (kg)
+                </Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  placeholder="10"
+                  value={formData.weight}
+                  onChange={(e) => handleInputChange("weight", e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="urgency">Urgency Level</Label>
+                <Select value={formData.urgency} onValueChange={(value) => handleInputChange("urgency", value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Low - Within 24 hours</SelectItem>
+                    <SelectItem value="normal">Normal - Within 12 hours</SelectItem>
+                    <SelectItem value="high">High - Within 6 hours</SelectItem>
+                    <SelectItem value="urgent">Urgent - ASAP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Additional Description</Label>
+              <Textarea
+                id="description"
+                placeholder="Any special handling instructions or additional details..."
+                value={formData.description}
+                onChange={(e) => handleInputChange("description", e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            <Button type="submit" className="w-full bg-gradient-primary hover:shadow-elegant transition-all duration-300" disabled={isLoading}>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <Route className="w-4 h-4 animate-spin" />
+                  🤖 AI Optimizing Route...
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Create Smart Shipment
+                </div>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
