@@ -23,7 +23,7 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
 
   // Check if Google Maps is already loaded
   useEffect(() => {
-    if (typeof google !== 'undefined' && google.maps) {
+    if (typeof window !== 'undefined' && (window as any).google?.maps) {
       initializeMap();
     }
   }, []);
@@ -55,8 +55,10 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
   };
 
   const initializeMap = () => {
-    if (!mapRef.current || !google?.maps) return;
+    if (!mapRef.current || !(window as any).google?.maps) return;
 
+    const google = (window as any).google;
+    
     // Default to Delhi, India
     const defaultLocation = { lat: 28.6139, lng: 77.2090 };
     
@@ -144,7 +146,7 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
     }
   };
 
-  if (!isMapLoaded && typeof google === 'undefined') {
+  if (!isMapLoaded && typeof window !== 'undefined' && !(window as any).google) {
     return (
       <Card className="w-full">
         <CardHeader>

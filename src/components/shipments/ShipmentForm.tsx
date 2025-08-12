@@ -38,7 +38,8 @@ export const ShipmentForm = ({ onSubmit }: ShipmentFormProps) => {
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Mock AI response with enhanced route data if coordinates are available
-    let routeOptimization = {};
+    let routeOptimization: { distance?: string; coordinates?: { pickup: { lat: number; lng: number }; dropoff: { lat: number; lng: number } } } = {};
+    
     if (pickupCoords && dropoffCoords) {
       // Calculate approximate distance (simplified)
       const distance = Math.sqrt(
