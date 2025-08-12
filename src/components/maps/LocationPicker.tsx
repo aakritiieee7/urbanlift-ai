@@ -18,22 +18,21 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
   const [searchValue, setSearchValue] = useState(initialValue);
   const [geocoder, setGeocoder] = useState<google.maps.Geocoder | null>(null);
-  const [apiKeyInput, setApiKeyInput] = useState("");
   const [isMapLoaded, setIsMapLoaded] = useState(false);
+
+  const API_KEY = "AIzaSyCCNuKoiHgqPxxjYnkG3P2ENhQlCWku8ak";
 
   // Check if Google Maps is already loaded
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as any).google?.maps) {
+      setIsMapLoaded(true);
       initializeMap();
+    } else {
+      loadGoogleMaps();
     }
   }, []);
 
   const loadGoogleMaps = () => {
-    if (!apiKeyInput.trim()) {
-      alert("Please enter your Google Maps API key");
-      return;
-    }
-
     // Remove existing script if any
     const existingScript = document.querySelector('script[src*="maps.googleapis.com"]');
     if (existingScript) {
@@ -41,7 +40,7 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
     }
 
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKeyInput}&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
     script.async = true;
     script.defer = true;
     script.onload = () => {
@@ -49,7 +48,7 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
       initializeMap();
     };
     script.onerror = () => {
-      alert("Failed to load Google Maps. Please check your API key.");
+      console.error("Failed to load Google Maps");
     };
     document.head.appendChild(script);
   };
@@ -146,7 +145,7 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
     }
   };
 
-  if (!isMapLoaded && typeof window !== 'undefined' && !(window as any).google) {
+  if (!isMapLoaded) {
     return (
       <Card className="w-full">
         <CardHeader>
@@ -157,26 +156,11 @@ export const LocationPicker = ({ onLocationSelect, placeholder, label, initialVa
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="p-6 bg-muted rounded-lg text-center space-y-4">
-            <MapPin className="w-12 h-12 mx-auto text-muted-foreground" />
+            <MapPin className="w-12 h-12 mx-auto text-muted-foreground animate-pulse" />
             <div>
-              <h3 className="font-semibold mb-2">Google Maps API Key Required</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                To use location selection, please enter your Google Maps API key. 
-                You can get one from the Google Cloud Console.
-              </p>
-              <div className="space-y-2">
-                <Input
-                  type="password"
-                  placeholder="Enter Google Maps API Key"
-                  value={apiKeyInput}
-                  onChange={(e) => setApiKeyInput(e.target.value)}
-                />
-                <Button onClick={loadGoogleMaps} className="w-full">
-                  Load Maps
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Alternatively, you can type addresses manually in the form
+              <h3 className="font-semibold mb-2">Loading Google Maps...</h3>
+              <p className="text-sm text-muted-foreground">
+                Please wait while we load the interactive map
               </p>
             </div>
           </div>
